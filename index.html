@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Organize toda a sua vida num só lugar - Tarefas, Finanças, Hábitos, Metas e muito mais">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LifeHub">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%234f46e5' width='32' height='32' rx='6'/%3E%3Cpath fill='white' d='M16 8c-1.5 0-2.7 1.2-2.7 2.7v10.6c0 1.5 1.2 2.7 2.7 2.7s2.7-1.2 2.7-2.7V10.7c0-1.5-1.2-2.7-2.7-2.7zM10.7 13.3c-1.5 0-2.7 1.2-2.7 2.7v5.3c0 1.5 1.2 2.7 2.7 2.7s2.7-1.2 2.7-2.7V16c0-1.5-1.2-2.7-2.7-2.7zM21.3 13.3c-1.5 0-2.7 1.2-2.7 2.7v5.3c0 1.5 1.2 2.7 2.7 2.7s2.7-1.2 2.7-2.7V16c0-1.5-1.2-2.7-2.7-2.7z'/%3E%3C/svg%3E">
+    
+    <title>Organizer Pro</title>
+    
+    <!-- BIBLIOTECAS EXTERNAS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: {
+                        'xs': '475px',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- LIGAÇÃO AO FICHEIRO CSS EXTERNO -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- CONFIGURAÇÃO FIREBASE -->
+    <script>
+        window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCmBU2kNrubo9wq_LAv48gc43z5W3aEA20",
+            authDomain: "organizer-pro-8265b.firebaseapp.com",
+            projectId: "organizer-pro-8265b",
+            storageBucket: "organizer-pro-8265b.firebasestorage.app",
+            messagingSenderId: "808869302239",
+            appId: "1:808869302239:web:a9603d1ca6e9a5190d7e6a"
+        });
+        window.__app_id = 'lifehub-platinum-v1';
+        window.__initial_auth_token = '';
+    </script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-content">Pular para o conteúdo principal</a>
+
+    <!-- Ecrã de Carregamento (Splash Screen) -->
+    <div id="loading" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-500" role="status" aria-live="polite" aria-label="Carregando aplicação">
+        <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-4 font-bold text-indigo-600 tracking-wide uppercase text-xs">A preparar o seu Organizer Pro...</p>
+    </div>
+
+    <!-- Tela de Login/Cadastro -->
+    <div id="auth-screen" class="fixed inset-0 z-[90] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        
+        <div class="relative w-full max-w-md">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 sm:p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl mb-3 sm:mb-4 shadow-lg">
+                        <i data-lucide="shield-check" class="w-7 h-7 sm:w-8 sm:h-8 text-indigo-600"></i>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-white mb-2">Organizer <span class="text-pink-200">Pro</span></h1>
+                    <p class="text-indigo-100 text-xs sm:text-sm font-medium">Organize toda a sua vida num só lugar</p>
+                </div>
+
+                <!-- Formulário de Login -->
+                <div id="login-form" class="p-6 sm:p-8">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-6 text-center">Bem-vindo de volta!</h2>
+                    
+                    <div id="auth-error" class="hidden mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm font-medium"></div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-2 block mb-2">Email</label>
+                            <input type="email" id="login-email" placeholder="seu@email.com" onkeypress="if(event.key==='Enter') handleLogin()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-2 block mb-2">Palavra-passe</label>
+                            <input type="password" id="login-password" placeholder="••••••••" onkeypress="if(event.key==='Enter') handleLogin()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all">
+                        </div>
+                    </div>
+
+                    <button id="login-btn" onclick="handleLogin()" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-xl hover:shadow-indigo-200 hover:from-indigo-700 hover:to-purple-700 transition-all mb-4 active:scale-95 group" aria-label="Fazer login">
+                        <span class="flex items-center justify-center gap-2">
+                            <i data-lucide="log-in" class="w-5 h-5" aria-hidden="true"></i>
+                            ENTRAR
+                        </span>
+                    </button>
+                    
+                    <button onclick="handleForgotPassword()" class="w-full text-sm text-slate-500 hover:text-indigo-600 font-semibold mb-3 transition-colors flex items-center justify-center gap-1">
+                        <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                        Esqueceu a palavra-passe?
+                    </button>
+                    
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-3 text-slate-500 font-bold">Ou continue com</span></div>
+                    </div>
+
+                    <!-- Botões de Login Social -->
+                    <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 mb-6">
+                        <button onclick="handleGoogleLogin(event)" class="flex items-center justify-center gap-2 py-3 bg-white border-2 border-slate-200 rounded-xl hover:border-slate-300 hover:bg-slate-50 transition-all font-semibold text-slate-700 active:scale-95 text-sm sm:text-base">
+                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                            <span class="hidden xs:inline">Google</span>
+                        </button>
+                        <button onclick="handleAppleLogin(event)" class="flex items-center justify-center gap-2 py-3 bg-black border-2 border-black rounded-xl hover:bg-slate-900 transition-all font-semibold text-white active:scale-95 text-sm sm:text-base">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                            <span class="hidden xs:inline">Apple</span>
+                        </button>
+                    </div>
+
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-3 text-slate-500 font-bold">Ainda não tem conta?</span></div>
+                    </div>
+
+                    <button onclick="showRegisterForm()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:shadow-xl hover:shadow-purple-200 hover:from-purple-700 hover:to-pink-700 transition-all mb-4 active:scale-95 group">
+                        <span class="flex items-center justify-center gap-2">
+                            <i data-lucide="user-plus" class="w-5 h-5"></i>
+                            CRIAR NOVA CONTA
+                        </span>
+                    </button>
+                    
+                    <button id="anonymous-btn" onclick="handleAnonymousLogin()" class="w-full py-3.5 bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-700 font-semibold text-sm transition-all rounded-xl flex items-center justify-center gap-2 active:scale-95" aria-label="Continuar como convidado">
+                        <i data-lucide="user-x" class="w-4 h-4" aria-hidden="true"></i>
+                        Continuar como convidado
+                    </button>
+                </div>
+
+                <!-- Formulário de Cadastro -->
+                <div id="register-form" class="p-6 sm:p-8 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-6 text-center">Criar Conta</h2>
+                    
+                    <div id="register-error" class="hidden mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm font-medium"></div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-2 block mb-2">Nome</label>
+                            <input type="text" id="register-name" placeholder="Seu nome" onkeypress="if(event.key==='Enter') handleRegister()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-2 block mb-2">Email</label>
+                            <input type="email" id="register-email" placeholder="seu@email.com" onkeypress="if(event.key==='Enter') handleRegister()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-2 block mb-2">Palavra-passe</label>
+                            <input type="password" id="register-password" placeholder="Mínimo 6 caracteres" oninput="checkPasswordStrength()" onkeypress="if(event.key==='Enter') handleRegister()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all">
+                            <div id="password-strength" class="mt-2 hidden">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                        <div id="password-strength-bar" class="h-full transition-all duration-300"></div>
+                                    </div>
+                                    <span id="password-strength-text" class="text-xs font-bold"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="register-btn" onclick="handleRegister()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:shadow-xl hover:shadow-purple-200 hover:from-purple-700 hover:to-pink-700 transition-all mb-4 active:scale-95" aria-label="Criar nova conta">
+                        <span class="flex items-center justify-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5" aria-hidden="true"></i>
+                            CRIAR CONTA
+                        </span>
+                    </button>
+                    
+                    <button onclick="showLoginForm()" class="w-full py-3.5 bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-700 font-semibold text-sm transition-all rounded-xl flex items-center justify-center gap-2 active:scale-95">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        Já tem conta? Entrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app" class="hidden flex flex-col md:flex-row min-h-screen">
+        
+        <!-- BARRA LATERAL (SIDEBAR) -->
+        <aside class="w-full md:w-72 glass-card md:h-screen sticky top-0 z-50 p-6 flex flex-col border-r border-slate-200 bg-white/80 backdrop-blur-md">
+            <div class="flex items-center justify-between mb-10 px-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h1 class="text-xl font-extrabold tracking-tight">Organizer <span class="text-indigo-600">Pro</span></h1>
+                </div>
+                <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl transition-all hover:scale-105 active:scale-95" title="Alternar modo escuro" aria-label="Alternar modo escuro">
+                    <i data-lucide="moon" class="w-5 h-5 text-white"></i>
+                </button>
+            </div>
+
+            <nav class="flex md:flex-col gap-2 overflow-x-auto no-scrollbar pb-4" role="navigation" aria-label="Menu principal">
+                <button onclick="showTab('dashboard')" id="tab-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all tab-active whitespace-nowrap group">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="showTab('focus')" id="tab-focus" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="zap" class="w-5 h-5"></i> Foco
+                </button>
+                <button onclick="showTab('tasks')" id="tab-tasks" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="check-circle-2" class="w-5 h-5"></i> Tarefas
+                </button>
+                <button onclick="showTab('shopping')" id="tab-shopping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i> Compras
+                </button>
+                <button onclick="showTab('finance')" id="tab-finance" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="wallet" class="w-5 h-5"></i> Finanças
+                </button>
+                <button onclick="showTab('notes')" id="tab-notes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="pen-tool" class="w-5 h-5"></i> Notas
+                </button>
+                <button onclick="showTab('habits')" id="tab-habits" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="target" class="w-5 h-5"></i> Hábitos
+                </button>
+                <button onclick="showTab('goals')" id="tab-goals" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="trophy" class="w-5 h-5"></i> Metas
+                </button>
+                <button onclick="showTab('calendar')" id="tab-calendar" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-semibold hover:bg-indigo-50 hover:text-indigo-600 transition-all whitespace-nowrap group">
+                    <i data-lucide="calendar" class="w-5 h-5"></i> Calendário
+                </button>
+            </nav>
+
+            <!-- Botão de Logout -->
+            <div class="mt-auto">
+                <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-rose-50 text-rose-600 rounded-xl font-bold hover:bg-rose-100 transition-all group">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span class="text-sm">Sair</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ÁREA DE CONTEÚDO -->
+        <main id="main-content" class="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full" role="main">
+
+            <!-- ABA FOCO / POMODORO -->
+            <section id="content-focus" class="tab-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-2 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                            <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                        </div>
+                        Sessão de Foco
+                    </h2>
+                    <p class="text-slate-500 font-medium">Concentre-se usando a técnica Pomodoro</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Timer Principal -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-3xl p-8 shadow-2xl text-white">
+                            <!-- Status e Controles -->
+                            <div class="flex items-center justify-between mb-8">
+                                <div class="flex items-center gap-3">
+                                    <div id="pomo-status-indicator" class="w-3 h-3 rounded-full bg-white/30"></div>
+                                    <span class="text-sm font-bold uppercase tracking-widest opacity-90">Modo Foco</span>
+                                </div>
+                                <i data-lucide="flame" class="w-6 h-6 text-orange-300"></i>
+                            </div>
+
+                            <!-- Timer Circular Grande -->
+                            <div class="flex justify-center mb-10">
+                                <div class="relative w-72 h-72">
+                                    <svg class="transform -rotate-90 w-72 h-72">
+                                        <circle cx="144" cy="144" r="130" stroke="currentColor" stroke-width="10" fill="none" class="text-white/20"/>
+                                        <circle id="pomo-progress-circle" cx="144" cy="144" r="130" stroke="currentColor" stroke-width="10" fill="none" 
+                                                class="text-white transition-all duration-1000" 
+                                                stroke-dasharray="816.814" 
+                                                stroke-dashoffset="0"
+                                                stroke-linecap="round"/>
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span id="pomo-display" class="font-mono text-7xl font-black tracking-wider">25:00</span>
+                                        <p class="text-white/60 text-sm font-bold uppercase tracking-wider mt-2">Minutos Restantes</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botões de Controle -->
+                            <div class="flex items-center justify-center gap-4 mb-6">
+                                <button onclick="resetPomodoro()" id="pomo-reset-btn" 
+                                        class="p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all active:scale-95 border border-white/20 disabled:opacity-30 disabled:cursor-not-allowed backdrop-blur-sm" 
+                                        title="Reiniciar" disabled>
+                                    <i data-lucide="rotate-ccw" class="w-6 h-6"></i>
+                                </button>
+                                <button onclick="togglePomodoro()" id="pomo-btn" 
+                                        class="p-6 bg-white rounded-2xl hover:bg-white/90 transition-all shadow-2xl active:scale-95 text-indigo-600">
+                                    <i data-lucide="play" class="w-8 h-8"></i>
+                                </button>
+                                <button onclick="skipPomodoro()" id="pomo-skip-btn" 
+                                        class="p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all active:scale-95 border border-white/20 disabled:opacity-30 disabled:cursor-not-allowed backdrop-blur-sm" 
+                                        title="Pular" disabled>
+                                    <i data-lucide="skip-forward" class="w-6 h-6"></i>
+                                </button>
+                            </div>
+
+                            <!-- Info de Pausa -->
+                            <div class="text-center">
+                                <p class="text-white/70 text-sm">💡 Após 25 minutos, faça uma pausa de 5 minutos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Painel Lateral -->
+                    <div class="space-y-6">
+                        <!-- Estatísticas do Dia -->
+                        <div class="bg-white rounded-2xl p-6 border-2 border-slate-200 shadow-sm">
+                            <h4 class="font-black text-slate-900 mb-4 flex items-center gap-2 text-sm">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-600"></i>
+                                Hoje
+                            </h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wide mb-1">Tempo de Foco</p>
+                                    <h3 id="stat-focus-time" class="text-3xl font-black text-indigo-600">0<span class="text-lg text-slate-400 ml-1">min</span></h3>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wide mb-1">Ciclos Completos</p>
+                                    <h3 id="stat-pomo-count" class="text-3xl font-black text-purple-600">0<span class="text-lg text-slate-400 ml-1">ciclos</span></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dicas Rápidas -->
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200">
+                            <h4 class="font-black text-amber-900 mb-3 flex items-center gap-2 text-sm">
+                                <i data-lucide="lightbulb" class="w-4 h-4 text-amber-600"></i>
+                                Técnica Pomodoro
+                            </h4>
+                            <ul class="space-y-2 text-sm text-amber-800">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">1.</span>
+                                    <span>Escolha uma tarefa</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">2.</span>
+                                    <span>Foque por 25 minutos</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">3.</span>
+                                    <span>Faça uma pausa de 5 min</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">4.</span>
+                                    <span>Repita 4x e pause 15-30 min</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Motivação -->
+                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border-2 border-indigo-200">
+                            <div class="text-center">
+                                <p class="text-4xl mb-3">🎯</p>
+                                <p class="text-sm font-bold text-indigo-900 leading-relaxed">
+                                    "Foco é a chave para a excelência"
+                                </p>
+                                <p class="text-xs text-indigo-600 mt-2">— Cal Newport</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <!-- DASHBOARD -->
+            <section id="content-dashboard" class="tab-content space-y-8">
+                <div class="flex flex-col lg:flex-row justify-between items-start gap-6">
+                    <div class="flex-1">
+                        <h2 id="greeting" class="text-3xl font-black text-slate-900 tracking-tight">Bom dia, <span class="text-indigo-600">Utilizador</span></h2>
+                        <p id="date-now" class="text-slate-500 font-medium text-sm mb-4"></p>
+                        
+                        <!-- Frase do Dia -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-2xl border border-indigo-100 max-w-2xl">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">💭 Frase do Dia</p>
+                                    <p id="daily-quote" class="text-slate-700 font-semibold text-sm leading-relaxed italic">"Carregando frase motivacional..."</p>
+                                    <p id="quote-category" class="text-[10px] text-slate-400 mt-2 font-medium uppercase tracking-wide"></p>
+                                </div>
+                                <button onclick="openQuoteSettings()" class="p-2 hover:bg-white rounded-lg transition-colors" title="Configurar frases">
+                                    <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm min-w-[300px]">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <div class="p-2 bg-blue-100 rounded-lg">
+                                    <i data-lucide="droplet" class="w-4 h-4 text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider">Hidratação Diária</p>
+                                    <p id="dash-water" class="text-lg font-black text-slate-800">0.0 / 2.5L</p>
+                                </div>
+                            </div>
+                            <button onclick="openWeightModal()" class="p-2 hover:bg-slate-100 rounded-lg transition-colors" title="Configurar peso">
+                                <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Barra de progresso -->
+                        <div class="mb-3">
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                                <div id="water-progress-bar" class="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-500 shadow-sm" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sugestão -->
+                        <p id="water-suggestion" class="text-[10px] text-slate-500 font-medium mb-3"></p>
+                        
+                        <!-- Botões rápidos -->
+                        <div class="flex gap-2">
+                            <button onclick="addWater(200)" class="flex-1 py-2 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold transition-all active:scale-95">
+                                +200ml
+                            </button>
+                            <button onclick="addWater(250)" class="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all active:scale-95 shadow-sm">
+                                +250ml
+                            </button>
+                            <button onclick="addWater(500)" class="flex-1 py-2 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold transition-all active:scale-95">
+                                +500ml
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-indigo-600 p-6 rounded-3xl text-white shadow-xl shadow-indigo-100 flex flex-col justify-between h-32">
+                        <p class="text-indigo-100 text-[10px] font-bold uppercase tracking-wider">Saldo Líquido</p>
+                        <h3 id="dash-balance" class="text-3xl font-black">0,00€</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 flex flex-col justify-between h-32">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Despesas Mensais</p>
+                        <h3 id="dash-expenses" class="text-2xl font-black text-rose-500">0,00€</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 flex flex-col justify-between h-32">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Foco Acumulado</p>
+                        <h3 id="dash-focus" class="text-2xl font-black text-indigo-600">0m</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 flex flex-col justify-between h-32">
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Pendentes</p>
+                        <h3 id="dash-tasks-count" class="text-2xl font-black text-slate-800">0</h3>
+                    </div>
+                </div>
+
+                <!-- Gráficos de Estatísticas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white p-8 rounded-3xl border-2 border-slate-200 shadow-sm">
+                        <h4 class="font-black text-slate-900 mb-6 flex items-center gap-2 text-base">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-indigo-600"></i>
+                            Progresso Semanal
+                        </h4>
+                        <div style="position: relative; height: 280px;">
+                            <canvas id="weekly-progress-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border-2 border-slate-200 shadow-sm">
+                        <h4 class="font-black text-slate-900 mb-6 flex items-center gap-2 text-base">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-600"></i>
+                            Distribuição de Tarefas
+                        </h4>
+                        <div style="position: relative; height: 280px;">
+                            <canvas id="tasks-distribution-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Widgets Secundários -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                                <i data-lucide="list-todo" class="w-4 h-4 text-indigo-500"></i> Próximas Tarefas
+                            </h4>
+                            <button onclick="showTab('tasks')" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Ver Todas</button>
+                        </div>
+                        <ul id="dash-tasks" class="space-y-4"></ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-indigo-500"></i> Compras em falta
+                            </h4>
+                            <button onclick="showTab('shopping')" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">Ir para Lista</button>
+                        </div>
+                        <div id="dash-shopping" class="space-y-3"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAREFAS -->
+            <section id="content-tasks" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-black tracking-tight">Gestão de Tarefas</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 bg-white p-8 rounded-3xl border border-slate-200 h-fit sticky top-24">
+                        <h4 class="font-bold mb-4 text-slate-800">Adicionar Tarefa</h4>
+                        <input type="text" id="task-input" placeholder="O que tens em mente?" class="w-full p-4 bg-slate-50 rounded-2xl mb-4 border border-transparent focus:border-indigo-100 focus:bg-white focus:ring-4 focus:ring-indigo-50 outline-none transition-all">
+                        <div class="flex flex-col gap-2 mb-6">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">Prioridade</label>
+                            <select id="task-priority" class="w-full p-4 bg-slate-50 rounded-2xl border-none outline-none appearance-none">
+                                <option value="low">Baixa Prioridade</option>
+                                <option value="medium" selected>Média Prioridade</option>
+                                <option value="high">Alta Prioridade</option>
+                            </select>
+                        </div>
+                        <button onclick="handleAddTask()" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-100 transition-all active:scale-95">CRIAR TAREFA</button>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <ul id="full-tasks" class="space-y-3"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPRAS -->
+            <section id="content-shopping" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-black">Lista de Compras</h2>
+                    <button onclick="clearBoughtItems()" class="text-xs font-bold text-rose-500 bg-rose-50 px-4 py-2 rounded-lg hover:bg-rose-100">Limpar Comprados</button>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200">
+                    <div class="flex gap-4 mb-8">
+                        <input type="text" id="shop-input" placeholder="Ex: Leite, Ovos, Arroz..." class="flex-1 p-4 bg-slate-50 rounded-2xl border border-transparent focus:border-indigo-100 outline-none transition-all">
+                        <button onclick="handleAddShopping()" class="px-8 bg-slate-900 text-white font-bold rounded-2xl hover:bg-black transition-all">ADICIONAR</button>
+                    </div>
+                    <div id="shopping-list-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </div>
+            </section>
+
+            <!-- FINANÇAS -->
+            <section id="content-finance" class="tab-content hidden space-y-6">
+                <h2 class="text-2xl font-black">Fluxo Financeiro</h2>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-3">Descrição</label>
+                            <input type="text" id="fin-desc" placeholder="Ex: Salário, Jantar..." class="p-4 bg-slate-50 rounded-2xl border-none outline-none focus:bg-indigo-50/30">
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-3">Valor (€)</label>
+                            <input type="number" id="fin-val" placeholder="0.00" class="p-4 bg-slate-50 rounded-2xl border-none outline-none focus:bg-indigo-50/30">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="handleAddFinance()" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all">REGISTRAR MOVIMENTO</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                                <tr>
+                                    <th class="pb-4 px-2">Data</th>
+                                    <th class="pb-4">Descrição</th>
+                                    <th class="pb-4 text-right">Valor</th>
+                                    <th class="pb-4 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finance-list" class="text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NOTAS -->
+            <section id="content-notes" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-black">Pensamentos e Notas</h2>
+                </div>
+                <div class="bg-indigo-600 p-8 rounded-3xl shadow-xl shadow-indigo-100 mb-8">
+                    <textarea id="note-input" rows="3" class="w-full bg-transparent border-none outline-none text-white placeholder-indigo-200 font-medium text-lg resize-none" placeholder="O que estás a pensar agora?"></textarea>
+                    <div class="flex justify-end mt-4">
+                        <button onclick="handleSaveNote()" class="px-8 py-3 bg-white text-indigo-600 text-xs font-black rounded-xl hover:bg-indigo-50 transition-all shadow-lg active:scale-95 hover:shadow-xl">GUARDAR NOTA</button>
+                    </div>
+                </div>
+                <div id="notes-grid" class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"></div>
+            </section>
+
+            <!-- HÁBITOS DIÁRIOS -->
+            <section id="content-habits" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-black">Hábitos Diários</h2>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 mb-6">
+                    <h4 class="font-bold mb-4 text-slate-800">Adicionar Novo Hábito</h4>
+                    <div class="flex gap-4">
+                        <input type="text" id="habit-input" placeholder="Ex: Exercício, Meditação, Ler..." class="flex-1 p-4 bg-slate-50 rounded-2xl border border-transparent focus:border-indigo-100 outline-none transition-all">
+                        <button onclick="handleAddHabit()" class="px-8 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all">ADICIONAR</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="habits-grid"></div>
+            </section>
+
+            <!-- METAS -->
+            <section id="content-goals" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-black">Metas e Objetivos</h2>
+                </div>
+                <div class="bg-gradient-to-br from-purple-600 to-indigo-600 p-8 rounded-3xl shadow-xl shadow-purple-100 mb-8">
+                    <h4 class="font-bold mb-4 text-white">Criar Nova Meta</h4>
+                    <input type="text" id="goal-title" placeholder="Nome da meta" class="w-full p-4 bg-white/20 text-white placeholder-white/70 rounded-2xl mb-3 border-none outline-none backdrop-blur-sm">
+                    <textarea id="goal-desc" rows="2" placeholder="Descrição (opcional)" class="w-full p-4 bg-white/20 text-white placeholder-white/70 rounded-2xl mb-3 border-none outline-none backdrop-blur-sm resize-none"></textarea>
+                    <div class="flex gap-4">
+                        <select id="goal-period" class="flex-1 p-4 bg-white/20 text-white rounded-2xl border-none outline-none backdrop-blur-sm">
+                            <option value="semanal">Semanal</option>
+                            <option value="mensal">Mensal</option>
+                            <option value="trimestral">Trimestral</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                        <button onclick="handleAddGoal()" class="px-8 bg-white text-purple-600 font-bold rounded-2xl hover:bg-slate-50 transition-all">CRIAR META</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="goals-list"></div>
+            </section>
+
+            <!-- CALENDÁRIO -->
+            <section id="content-calendar" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-black">Calendário & Agenda</h2>
+                    <div class="flex items-center gap-3">
+                        <button onclick="changeMonth(-1)" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                        <span id="calendar-month" class="font-bold text-slate-700 min-w-[150px] text-center"></span>
+                        <button onclick="changeMonth(1)" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Calendário -->
+                    <div class="lg:col-span-2 bg-white p-8 rounded-3xl border border-slate-200">
+                        <div class="grid grid-cols-7 gap-2 mb-4">
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Dom</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Seg</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Ter</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Qua</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Qui</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Sex</div>
+                            <div class="text-center text-[10px] font-bold text-slate-400 uppercase py-2">Sáb</div>
+                        </div>
+                        <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
+                    </div>
+                    
+                    <!-- Eventos do dia -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 h-fit sticky top-24">
+                        <h4 class="font-bold mb-4 text-slate-800">Adicionar Evento</h4>
+                        <input type="text" id="event-title" placeholder="Título do evento" class="w-full p-3 bg-slate-50 rounded-xl mb-3 border border-transparent focus:border-indigo-100 outline-none text-sm">
+                        <input type="date" id="event-date" class="w-full p-3 bg-slate-50 rounded-xl mb-3 border-none outline-none text-sm">
+                        <input type="time" id="event-time" class="w-full p-3 bg-slate-50 rounded-xl mb-4 border-none outline-none text-sm">
+                        <button onclick="handleAddEvent()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all text-sm">ADICIONAR EVENTO</button>
+                        
+                        <div class="mt-6 pt-6 border-t border-slate-100">
+                            <h5 class="text-[10px] font-bold text-slate-400 uppercase mb-3">Próximos Eventos</h5>
+                            <div id="upcoming-events" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    </div>
+
+    <!-- MODAL DE SUBTAREFAS -->
+    <div id="subtask-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8 relative">
+            <button onclick="closeSubtaskModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+            
+            <h3 id="subtask-modal-title" class="text-xl sm:text-2xl font-black text-slate-900 mb-2 pr-8"></h3>
+            <p class="text-xs sm:text-sm text-slate-500 mb-4 sm:mb-6">Divida esta tarefa em etapas menores</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                <input type="text" id="subtask-input" placeholder="Nova subtarefa..." class="flex-1 p-3 bg-slate-50 rounded-xl border border-transparent focus:border-indigo-100 outline-none text-sm sm:text-base">
+                <button onclick="handleAddSubtask()" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all whitespace-nowrap text-sm sm:text-base">ADICIONAR</button>
+            </div>
+            
+            <div id="subtask-list" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIGURAÇÃO DE FRASES DO DIA -->
+    <div id="quote-settings-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black text-slate-900">Preferências de Frases</h3>
+                <button onclick="closeQuoteSettings()" class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-slate-500"></i>
+                </button>
+            </div>
+            
+            <p class="text-sm text-slate-500 mb-6">Escolha os tipos de frases que deseja receber diariamente:</p>
+            
+            <div class="space-y-3 mb-8">
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 cursor-pointer transition-all">
+                    <input type="checkbox" id="cat-motivacao" value="motivacao" class="w-5 h-5 text-indigo-600 rounded" checked>
+                    <div>
+                        <p class="font-bold text-slate-800">💪 Motivação</p>
+                        <p class="text-xs text-slate-500">Frases inspiradoras e encorajadoras</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 cursor-pointer transition-all">
+                    <input type="checkbox" id="cat-produtividade" value="produtividade" class="w-5 h-5 text-indigo-600 rounded" checked>
+                    <div>
+                        <p class="font-bold text-slate-800">🚀 Produtividade</p>
+                        <p class="text-xs text-slate-500">Dicas para ser mais eficiente</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 cursor-pointer transition-all">
+                    <input type="checkbox" id="cat-saude" value="saude" class="w-5 h-5 text-indigo-600 rounded">
+                    <div>
+                        <p class="font-bold text-slate-800">🧘 Saúde & Bem-estar</p>
+                        <p class="text-xs text-slate-500">Cuidados com corpo e mente</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 cursor-pointer transition-all">
+                    <input type="checkbox" id="cat-crescimento" value="crescimento" class="w-5 h-5 text-indigo-600 rounded">
+                    <div>
+                        <p class="font-bold text-slate-800">📚 Crescimento Pessoal</p>
+                        <p class="text-xs text-slate-500">Desenvolvimento e aprendizado</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 cursor-pointer transition-all">
+                    <input type="checkbox" id="cat-gratidao" value="gratidao" class="w-5 h-5 text-indigo-600 rounded">
+                    <div>
+                        <p class="font-bold text-slate-800">🙏 Gratidão & Positividade</p>
+                        <p class="text-xs text-slate-500">Foco no lado bom da vida</p>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="flex gap-3">
+                <button onclick="closeQuoteSettings()" class="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">
+                    Cancelar
+                </button>
+                <button onclick="saveQuoteSettings()" class="flex-1 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold hover:shadow-lg transition-all">
+                    Salvar Preferências
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAR PESO -->
+    <div id="weight-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-6 sm:p-8 relative">
+            <button onclick="closeWeightModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+            
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-2">Configurar Peso Corporal</h3>
+            <p class="text-xs sm:text-sm text-slate-500 mb-6">Sua meta diária será: <strong>Peso × 35ml</strong></p>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-700 mb-2">Peso (kg)</label>
+                <input type="number" id="weight-input" step="0.1" min="30" max="200" placeholder="Ex: 70" oninput="updateWeightPreview()" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all text-lg">
+                <p id="weight-preview" class="text-sm text-blue-600 font-medium mt-2 hidden"></p>
+            </div>
+            
+            <div class="flex gap-3">
+                <button onclick="closeWeightModal()" class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">Cancelar</button>
+                <button onclick="saveWeight()" class="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARREGAMENTO DO FICHEIRO LÓGICO (JavaScript) -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
