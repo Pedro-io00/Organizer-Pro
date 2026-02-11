@@ -23,12 +23,6 @@
 *   **Chart.js** para visualização de dados
 *   lucide-icons
 
-## 🚀 Como instalar (Desenvolvimento)
-
-1.  Clone este repositório
-2.  Abra o ficheiro `index.html` no seu navegador (ou use uma extensão como Live Server)
-3.  Configure as suas credenciais do Firebase no ficheiro `js/config.js` se necessário.
-
-## 📄 Licença
+##  Licença
 
 Este projeto está sob a licença MIT.
