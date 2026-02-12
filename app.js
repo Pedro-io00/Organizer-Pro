@@ -1740,12 +1740,27 @@ function updateDashboardCharts() {
                             ctx.save();
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'middle';
-                            ctx.font = 'bold 15px Plus Jakarta Sans, sans-serif';
+                            
+                            // Ajustar tamanho da fonte dinamicamente baseado na largura
+                            const fontSize = width < 400 ? 12 : 15;
+                            ctx.font = `bold ${fontSize}px Plus Jakarta Sans, sans-serif`;
                             ctx.fillStyle = textColor;
-                            ctx.fillText('📊 Complete tarefas e use o Pomodoro', width / 2, height / 2 - 12);
-                            ctx.font = '13px Plus Jakarta Sans, sans-serif';
-                            ctx.fillStyle = isDark ? '#64748b' : '#64748b';
-                            ctx.fillText('para ver seu progresso aqui', width / 2, height / 2 + 12);
+                            
+                            if (width < 350) {
+                                // Quebrar em duas linhas para telas muito pequenas
+                                ctx.fillText('📊 Complete tarefas e', width / 2, height / 2 - 15);
+                                ctx.fillText('use o Pomodoro', width / 2, height / 2 + 5);
+                                
+                                ctx.font = `${fontSize - 2}px Plus Jakarta Sans, sans-serif`;
+                                ctx.fillStyle = isDark ? '#64748b' : '#64748b';
+                                ctx.fillText('para ver seu progresso', width / 2, height / 2 + 25);
+                            } else {
+                                ctx.fillText('📊 Complete tarefas e use o Pomodoro', width / 2, height / 2 - 12);
+                                ctx.font = `${fontSize - 2}px Plus Jakarta Sans, sans-serif`;
+                                ctx.fillStyle = isDark ? '#64748b' : '#64748b';
+                                ctx.fillText('para ver seu progresso aqui', width / 2, height / 2 + 12);
+                            }
+                            
                             ctx.restore();
                         }
                     }
