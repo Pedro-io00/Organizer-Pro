@@ -531,10 +531,10 @@
                     <h2 class="text-2xl font-black">Lista de Compras</h2>
                     <button onclick="clearBoughtItems()" class="text-xs font-bold text-rose-500 bg-rose-50 px-4 py-2 rounded-lg hover:bg-rose-100">Limpar Comprados</button>
                 </div>
-                <div class="bg-white p-8 rounded-3xl border border-slate-200">
-                    <div class="flex gap-4 mb-8">
-                        <input type="text" id="shop-input" placeholder="Ex: Leite, Ovos, Arroz..." class="flex-1 p-4 bg-slate-50 rounded-2xl border border-transparent focus:border-indigo-100 outline-none transition-all">
-                        <button onclick="handleAddShopping()" class="px-8 bg-slate-900 text-white font-bold rounded-2xl hover:bg-black transition-all">ADICIONAR</button>
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8">
+                        <input type="text" id="shop-input" placeholder="Ex: Leite, Ovos, Arroz..." class="w-full sm:flex-1 p-4 bg-slate-50 rounded-2xl border border-transparent focus:border-indigo-100 outline-none transition-all">
+                        <button onclick="handleAddShopping()" class="w-full sm:w-auto px-8 py-4 sm:py-0 bg-slate-900 text-white font-bold rounded-2xl hover:bg-black transition-all">ADICIONAR</button>
                     </div>
                     <div id="shopping-list-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
                 </div>
